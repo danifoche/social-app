@@ -86,3 +86,31 @@ class GetTokenError extends AuthenticationState {
   @override
   List<Object?> get props => [];
 }
+
+class LogoutError extends AuthenticationState {
+
+  final String message;
+
+  LogoutError({required this.message});
+
+  @override
+  List<Object?> get props => [];
+}
+
+class LogoutLoading extends AuthenticationState {
+
+  LogoutLoading();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class LogoutSuccess extends AuthenticationState {
+
+  final String message;
+
+  LogoutSuccess({required this.message});
+
+  @override
+  List<Object?> get props => [];
+}

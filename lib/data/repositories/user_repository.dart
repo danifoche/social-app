@@ -11,4 +11,7 @@ class UserRepository {
   //? Crea una nuova conversazione con l'utente specificato
   Future<Map<String, dynamic>?> createChatWithUser(String token, String username) async => await _userApi.createChatWithUser(token, username);
 
+  //? Ottieni tutte le info dell'utente loggato
+  Future<User?> getInfo() async => await _userApi.getInfo();
+
 }

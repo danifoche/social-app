@@ -6,6 +6,7 @@ import 'package:social_app_bloc/logic/bloc/user_bloc.dart';
 import 'package:social_app_bloc/logic/cubit/authentication_cubit.dart';
 import 'package:social_app_bloc/presentation/widgets/AddChat.dart';
 import 'package:social_app_bloc/presentation/widgets/ChatListView.dart';
+import 'package:social_app_bloc/presentation/widgets/Profile.dart';
 import 'package:social_app_bloc/presentation/widgets/SplashScreen.dart';
 import 'package:social_app_bloc/utils/custom_snackbar.dart';
 import 'package:social_app_bloc/settings/app_settings.dart';
@@ -42,6 +43,18 @@ class _HomeState extends State<Home> {
           //? Porta l'utente a loggarsi nuovamente
           Navigator.of(context).pushNamedAndRemoveUntil(
               appRoutes["login"] ?? "/error", (route) => false);
+        } else if (state is LogoutError) {
+
+          //? Mostra snackbar di errore
+          _customSnackbar.error(context, state.message);
+        } else if (state is LogoutSuccess) {
+
+          //? Mostra snackbar di errore
+          _customSnackbar.success(context, state.message);
+
+          //? Porta l'utente a loggarsi nuovamente
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              appRoutes["login"] ?? "/error", (route) => false);
         }
       },
       builder: (context, state) {
@@ -64,7 +77,11 @@ class _HomeState extends State<Home> {
                     changeScreen: changeScreen,
                   ),
                 ),
-                const Text("ciao3"),
+                BlocProvider(
+                  create: (context) => UserBloc(),
+                  lazy: false,
+                  child: const Profile(),
+                ),
               ],
             ),
             bottomNavigationBar: BottomNavigationBar(
@@ -76,9 +93,7 @@ class _HomeState extends State<Home> {
                   .showUnselectedLabels,
               currentIndex: index,
               onTap: (int newIndex) {
-                setState(() {
-                  index = newIndex;
-                });
+                setState(() => index = newIndex);
               },
               selectedItemColor: Theme.of(context)
                   .bottomNavigationBarTheme

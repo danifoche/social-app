@@ -77,4 +77,20 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
 
   }
 
+  void logout() async {
+
+    try {
+
+      emit(LogoutLoading());
+
+      await _authenticationRepository.logout();
+
+      emit(LogoutSuccess(message: "Logged out successfully!"));
+
+    } catch (e) {
+      emit(LogoutError(message: e.toString()));
+    }
+
+  }
+
 }

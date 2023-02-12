@@ -139,4 +139,34 @@ class AuthenticationApi {
 
   }
 
+  //? Ottengo l'id dell'utente corrente
+  Future<Map<String, dynamic>?> getUserId() async {
+
+    //? Ottengo l'utente loggato dalla storage
+    String? storedUser = await storage.read(key: userStorageKey);
+
+    if(storedUser == null) {
+      return null;
+    }
+
+    //? Ottengo il model dell'utente
+    User user = User.fromJson(jsonDecode(storedUser));
+
+    //? Ottengo il token di autenticazione
+    int? id = user.userId;
+
+    //? Se non trovo il token mando errore
+    if(id == null) {
+      return null;
+    }
+
+    return {
+      "id": id
+    };
+
+  }
+
+  //? Scollega l'utente ed elimina la storage collegata a lui
+  Future<void> logout() async => await storage.deleteAll();
+
 }

@@ -27,3 +27,6 @@ class UserCreateChat extends UserEvent {
   const UserCreateChat({required this.username});
 
 }
+
+//? Evento utilizzato per ottenere tutte le informazioni dell'utente loggato
+class UserGetInfo extends UserEvent {}

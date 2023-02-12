@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app_bloc/logic/bloc/chat_message_bloc.dart';
+import 'package:social_app_bloc/logic/bloc/pusher_bloc.dart';
 import 'package:social_app_bloc/presentation/widgets/ChatMessage.dart';
 import 'package:social_app_bloc/settings/app_settings.dart';
 import 'package:social_app_bloc/utils/custom_snackbar.dart';
@@ -107,20 +108,35 @@ class _ChatState extends State<Chat> {
                 //? Porta l'utente a loggarsi nuovamente
                 Navigator.of(context).pushNamedAndRemoveUntil(
                     appRoutes["login"] ?? "/error", (route) => false);
+              } else if(state is ChatMessagePusherStatus) {
+                if(state.connected) {
+                  BlocProvider.of<ChatMessageBloc>(context)
+                    .add(ChatMessageSubscribeChannel(websocketId: widget.websocketId));
+                }
               }
-            }, builder: (context, state) {
+            }, 
+            buildWhen: (previous, current) {
+              if(current is ChatMessagePusherStatus) {
+                return false;
+              } else {
+                return true;
+              }
+            },
+            builder: (context, state) {
               if (state is ChatMessageInitial) {
                 BlocProvider.of<ChatMessageBloc>(context)
                     .add(ChatMessageGetAll(chatId: widget.chatId));
               } else if (state is ChatMessageLoaded) {
 
-                //? Animazione per l'arrivo di un messaggio
-                _animatedListKey.currentState?.insertItem(0);
+                //? Fai l'animazione per l'ultimo messaggio inserito
+                _animatedListKey.currentState?.insertItem(
+                  0,
+                  duration: const Duration(milliseconds: 150),
+                );
 
                 return AnimatedList(
                   key: _animatedListKey,
                   reverse: true,
-                  controller: null,
                   padding: const EdgeInsets.all(15),
                   initialItemCount: state.chatList.length,
                   itemBuilder: ((context, index, animation) {
@@ -129,9 +145,17 @@ class _ChatState extends State<Chat> {
                         parent: animation,
                         curve: Curves.decelerate,
                       ),
-                      child: ChatMessage(
-                        message: state.chatList[index].message ?? "",
-                        isMe: state.chatList[index].isMe ?? true,
+                      child: SlideTransition(
+                        position: Tween<Offset>(
+                          begin: (state.chatList[index].isMe ?? true) 
+                                  ? const Offset(0.25, 0) 
+                                  : const Offset(-0.25, 0) ,
+                          end: Offset.zero,
+                        ).animate(animation),
+                        child: ChatMessage(
+                          message: state.chatList[index].message ?? "",
+                          isMe: state.chatList[index].isMe ?? true,
+                        ),
                       ),
                     );
                   }),
@@ -214,15 +238,17 @@ class _ChatState extends State<Chat> {
                     foregroundColor: Colors.black,
                   ),
                   onPressed: () {
-                    BlocProvider.of<ChatMessageBloc>(context).add(
-                      ChatMessageNew(
-                        message: messageInputController.text,
-                        chatId: widget.chatId,
-                      ),
-                    );  
+                    if (messageInputController.text.isNotEmpty) {
+                      BlocProvider.of<ChatMessageBloc>(context).add(
+                        ChatMessageNew(
+                          message: messageInputController.text,
+                          chatId: widget.chatId,
+                        ),
+                      );  
 
-                    //? Pulisco l'input
-                    messageInputController.text = '';
+                      //? Pulisco l'input
+                      messageInputController.clear();
+                    }
                   },
                   child: Icon(
                     Icons.send,

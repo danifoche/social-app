@@ -21,7 +21,7 @@ class ChatMessageLoaded extends ChatMessageState {
   const ChatMessageLoaded({required this.chatList});
 
   @override
-  List<Object> get props => [chatList];
+  List<Object> get props => [chatList.length];
 
 }
 
@@ -51,3 +51,18 @@ class ChatMessageEmpty extends ChatMessageState {
   const ChatMessageEmpty({required this.message});
 
 }
+
+//? Stato che determina lo stato di pusher
+class ChatMessagePusherStatus extends ChatMessageState {
+
+  //? Variabile che determina se ci sono degli errori di connessione
+  final bool connected;
+
+  //? Messaggio di errore
+  final String message;
+
+  const ChatMessagePusherStatus({required this.connected, required this.message});
+
+}
+
+class ChatNewMessage extends ChatMessageState {}

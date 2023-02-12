@@ -18,4 +18,10 @@ class AuthenticationRepository {
   //? Ottengo il token dell'utente
   Future<Map<String, dynamic>?> getUserToken() async => await _authenticationApi.getUserToken();
 
+  //? Ottengo l'id dell'utente loggato
+  Future<Map<String, dynamic>?> getUserId() async => await _authenticationApi.getUserId();
+
+  //? Scollega l'utente corrente
+  Future<void> logout() async => await _authenticationApi.logout();
+
 }

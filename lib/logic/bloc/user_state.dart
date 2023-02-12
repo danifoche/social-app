@@ -30,6 +30,15 @@ class UserError extends UserState {
 
 }
 
+//? Stato di utente caricato
+class UserProfileLoaded extends UserState {
+
+  final User user;
+
+  const UserProfileLoaded({required this.user});
+
+}
+
 //? Stato di errore generico per notifiche
 class UserNotificationError extends UserState {
 

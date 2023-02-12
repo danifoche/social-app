@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:social_app_bloc/data/models/message.dart';
 import 'package:social_app_bloc/settings/app_settings.dart';
@@ -9,6 +10,7 @@ class ChatMessageApi {
 
   final MakeApiCall _makeApiCall = MakeApiCall();
   final storage = const FlutterSecureStorage();
+  final _animatedListKey = GlobalKey<AnimatedListState>();
 
   Future<List<Message>?> getAll(String token, int chatId) async {
     //? Endpoint per ottenere la lista di chat
@@ -64,8 +66,7 @@ class ChatMessageApi {
       messageList = jsonDecode(messagesListStorage);
     }
 
-    //? Aggiungo il messaggio appena creato
-    messageList["$chatId"]?.insert(0, {
+    messageList["$chatId"].insert(0, {
       "message": message,
       "isMe": true
     });

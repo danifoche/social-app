@@ -1,10 +1,13 @@
 import 'dart:convert';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:social_app_bloc/data/models/user.dart';
+import 'package:social_app_bloc/settings/app_settings.dart';
 import 'package:social_app_bloc/settings/make_api_call.dart';
 
 class UserApi {
   final MakeApiCall _makeApiCall = MakeApiCall();
+  final storage = const FlutterSecureStorage();
 
   //? Cerca tutti gli utenti con una pattern specifica
   Future<List<User>?> searchUser(String token, String pattern) async {
@@ -48,5 +51,19 @@ class UserApi {
     }
 
     return null;
+  }
+
+  Future<User?> getInfo() async {
+
+    //? Ottengo l'utente loggato dalla storage
+    String? storedUser = await storage.read(key: userStorageKey);
+
+    if(storedUser == null) {
+      return null;
+    }
+
+    //? Ottengo il model dell'utente
+    return User.fromJson(jsonDecode(storedUser));
+
   }
 }

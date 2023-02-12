@@ -63,7 +63,6 @@ class _ChatListViewState extends State<ChatListView> {
                 }
               },
               builder: (context, state) {
-                print(state);
                 if (state is ChatListViewInitial) {
                   BlocProvider.of<ChatListViewBloc>(context)
                       .add(ChatListViewLoadList());

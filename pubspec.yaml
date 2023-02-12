@@ -44,6 +44,7 @@ dependencies:
   flutter_slidable: ^2.0.0
   flutter_dialogs: ^3.0.0
   rxdart: ^0.27.7
+  pusher_channels_flutter: ^2.1.0
 
 dev_dependencies:
   flutter_test:

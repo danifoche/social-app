@@ -46,6 +46,8 @@ ThemeData appTheme = ThemeData(
         fontSize: 40, fontWeight: FontWeight.w600, color: Colors.black),
     headlineMedium: TextStyle(
         fontSize: 30, fontWeight: FontWeight.w600, color: Colors.black),
+    labelLarge: TextStyle(
+        fontSize: 25, fontWeight: FontWeight.w600, color: Colors.black),
     labelMedium: TextStyle(
         fontSize: 19, fontWeight: FontWeight.w600, color: Colors.black),
     labelSmall: TextStyle(

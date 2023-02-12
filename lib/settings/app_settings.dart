@@ -31,3 +31,9 @@ List authenticationRoutes = [
 
 //? Path dello splash screen
 String splashScreenPath = 'assets/splash_screen/chat_logo_loading.json';
+
+//? Credenziali pusher
+Map pusherSettings = {
+  "apiKey": "e5b2c09eeb2fe2f7a670",
+  "cluster": "eu"
+};

@@ -93,5 +93,24 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
       },
     );
+
+    //? Ottieni tutte le info dell'utente loggato 
+    on<UserGetInfo>((event, emit) async {
+
+      try {
+        
+        User? user = await _userRepository.getInfo();
+
+        if(user == null) {
+          emit(const UserError(message: "An error has occoured!"));
+        } else {
+          emit(UserProfileLoaded(user: user));
+        }
+
+      } catch (e) {
+        emit(UserError(message: e.toString()));
+      }
+
+    });
   }
 }
